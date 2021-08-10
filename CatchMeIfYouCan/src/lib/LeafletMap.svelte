@@ -33,16 +33,16 @@
                 iconUrl: 'src/img/plane2.png',
 
                 iconSize:     [20, 20], // size of the icon
-                iconAnchor:   [0, 0], // point of the icon which will correspond to marker's location
+                iconAnchor:   [10, 10], // point of the icon which will correspond to marker's location
                 popupAnchor:  [0, 0] // point from which the popup should open relative to the iconAnchor
             });
 
             var redIcon = L.icon({
-                iconUrl: 'src/img/leaf-red.png',
+                iconUrl: 'src/img/bullseye.png',
 
-                iconSize:     [38, 95], // size of the icon
-                iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-                popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+                iconSize:     [100, 100], // size of the icon
+                iconAnchor:   [50, 50], // point of the icon which will correspond to marker's location
+                popupAnchor:  [0, 0] // point from which the popup should open relative to the iconAnchor
             });
 
             leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

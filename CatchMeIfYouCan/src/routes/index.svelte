@@ -14,21 +14,15 @@
 		help_value = value;
 	});
 
-	if (help_value >= 1)
-	{
-		textInfo = 'You need more help!!';
-	}
-	else if (help_value == 0)
-	{
-		textInfo = 'Everything is ok!';
-	}
-
 </script>
 
 <main>
 	<h1>{count_value}</h1>
 
-	<p>{help_value}</p>
-	<h2>{textInfo}</h2>
+	{#if help_value}
+		<p>You need more help!</p>
+	{:else}
+		<p>You are fine!</p>
+	{/if}
 	<LeafletMap />
 </main>
