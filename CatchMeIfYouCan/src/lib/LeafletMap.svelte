@@ -3,14 +3,17 @@
     // TODO:
     // 1. Randomize a start lat, long
     // 2. Show a text that you go in the wrong direction.  -- almost finished
-    // 3. Improved mark of found place - new png
-    // 4. Read lat,lon from json file.
 
     import { numClicks, helpNeeded } from '../stores.js';
     import { onMount } from 'svelte';
     import { browser } from '$app/env';
+    import { haversine } from '$lib/helpers.js';
 
-    let positionOfVarberg = [57.10557, 12.25078];
+    export let latObject;
+	export let lonObject;
+
+    let positionOfObject = [latObject, lonObject];
+
     const distEnum = {
         FOUND : 1,
         CLOSE : 10,
@@ -27,7 +30,7 @@
         if(browser) {
             const leaflet = await import('leaflet');
 
-            const map = leaflet.map('map').setView(positionOfVarberg, 3);
+            const map = leaflet.map('map').setView(positionOfObject, 3);
 
             var greenIcon = L.icon({
                 iconUrl: 'src/img/plane2.png',
@@ -37,7 +40,7 @@
                 popupAnchor:  [0, 0] // point from which the popup should open relative to the iconAnchor
             });
 
-            var redIcon = L.icon({
+            var bullseye = L.icon({
                 iconUrl: 'src/img/bullseye.png',
 
                 iconSize:     [100, 100], // size of the icon
@@ -63,7 +66,7 @@
                 numClicks.subscribe($ => val = $)()
 
                 console.log("You clicked the map at LAT: "+ lat+" and LONG: "+lon );
-                distanceDiffNow = haversine(positionOfVarberg[0], positionOfVarberg[1], lat, lon);
+                distanceDiffNow = haversine(positionOfObject[0], positionOfObject[1], lat, lon);
 
                 // calculate the distance difference in order to see if we are heading towards or away from the object.
                 var distanceDifferenceToLastPoint = distanceDiffNow - lastDistanceDiff;
@@ -87,7 +90,7 @@
                 lastDistanceDiff = distanceDiffNow;
 
                 if (distanceDiffNow <= distEnum.FOUND)
-                    leaflet.marker(positionOfVarberg, {icon: redIcon}).addTo(map);
+                    leaflet.marker(positionOfObject, {icon: bullseye}).addTo(map);
 
                 //Clear existing marker - not needed any more.
                 //if (theMarker != undefined) {
@@ -108,27 +111,6 @@
 
         }
     });
-
-    function haversine(lat1, lon1, lat2, lon2)
-    {
-        // distance between latitudes and longitudes
-        var dLat = degToRad(lat2 - lat1);
-        var dLon = degToRad(lon2 - lon1);
-
-        // convert to radians
-        lat1 = degToRad(lat1);
-        lat2 = degToRad(lat2);
-
-        // apply formulae
-        var a = Math.pow(Math.sin(dLat / 2), 2) + Math.pow(Math.sin(dLon / 2), 2) * Math.cos(lat1) * Math.cos(lat2);
-        let earthrad = 6371;
-        var c = 2 * Math.asin(Math.sqrt(a));
-        return earthrad * c;
-    };
-
-    function degToRad(degrees) {
-        return degrees * Math.PI / 180;
-    };
 
     function stepsInWrongDirection(cntIn, distanceDifferenceToLastPoint) {
         var cntOut = {};

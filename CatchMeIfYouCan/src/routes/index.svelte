@@ -1,28 +1,20 @@
 <script>
-	import { numClicks, helpNeeded } from '../stores.js';
+	import { numClicks, helpNeeded} from '../stores.js';
 	import LeafletMap from '$lib/LeafletMap.svelte';
-
-	var count_value;
-	var help_value;
-	var textInfo;
-
-	numClicks.subscribe(value => {
-		count_value = value;
-	});
-
-	helpNeeded.subscribe(value => {
-		help_value = value;
-	});
+	import * as myjson from '../json/test.json';
 
 </script>
 
 <main>
-	<h1>{count_value}</h1>
+	<h1>{$numClicks}</h1>
 
-	{#if help_value}
+	<p>{myjson.city1.lat}</p>
+	<p>{myjson.city1.lon}</p>
+
+	{#if $helpNeeded}
 		<p>You need more help!</p>
 	{:else}
 		<p>You are fine!</p>
 	{/if}
-	<LeafletMap />
+	<LeafletMap latObject={myjson.city1.lat} lonObject={myjson.city1.lon}/>
 </main>
